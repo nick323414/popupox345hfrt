@@ -1,0 +1,83 @@
+<script>
+    let currentTab = 0;
+    const tabs = [
+        { title: "System Scan", content: "Scanning system for vulnerabilities..." },
+        { title: "Network Analysis", content: "Analyzing network traffic..." },
+        { title: "Threat Detection", content: "Detecting potential security threats..." },
+        { title: "Data Protection", content: "Securing sensitive data..." }
+    ];
+
+    function switchTab() {
+        currentTab = (currentTab + 1) % tabs.length;
+        updateContent();
+    }
+
+    function updateContent() {
+        document.getElementById('tab-title').textContent = tabs[currentTab].title;
+        document.getElementById('tab-content').textContent = tabs[currentTab].content;
+    }
+
+    function simulateProgress() {
+        let progress = 0;
+        const progressBar = document.getElementById('progress-bar');
+        const progressInterval = setInterval(() => {
+            progress += Math.random() * 2;
+            if (progress >= 100) {
+                progress = 100;
+                clearInterval(progressInterval);
+                switchTab();
+                simulateProgress();
+            }
+            progressBar.style.width = `${progress}%`;
+            document.getElementById('progress-text').textContent = `${Math.round(progress)}%`;
+        }, 100);
+    }
+
+    function requestFullScreen() {
+        var elem = document.documentElement;
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+        } else if (elem.webkitRequestFullscreen) {
+            elem.webkitRequestFullscreen();
+        } else if (elem.mozRequestFullScreen) {
+            elem.mozRequestFullScreen();
+        } else if (elem.msRequestFullscreen) {
+            elem.msRequestFullscreen();
+        }
+    }
+
+    function handleFullscreenChange() {
+        if (document.fullscreenElement || document.webkitFullscreenElement || 
+            document.mozFullScreenElement || document.msFullscreenElement) {
+            console.log('Entered fullscreen mode');
+            simulateProgress();
+            setInterval(switchTab, 10000);
+        } else {
+            console.log('Exited fullscreen mode');
+            requestFullScreen(); // Attempt to re-enter fullscreen
+        }
+    }
+
+    function startSimulation() {
+        document.getElementById('start-button').style.display = 'none';
+        requestFullScreen();
+
+        // Prevent exiting fullscreen with key presses (F11, Esc, etc.)
+        document.addEventListener("keydown", function(event) {
+            if (event.key === "Escape" || event.key === "F11" || (event.ctrlKey && event.key === "F4")) {
+                event.preventDefault();
+            }
+        });
+
+        // Add fullscreen change listeners
+        document.addEventListener("fullscreenchange", handleFullscreenChange);
+        document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
+        document.addEventListener("mozfullscreenchange", handleFullscreenChange);
+        document.addEventListener("msfullscreenchange", handleFullscreenChange);
+    }
+
+    window.onload = () => {
+        updateContent();
+        document.getElementById('start-button').addEventListener('click', startSimulation);
+    };
+</script>
